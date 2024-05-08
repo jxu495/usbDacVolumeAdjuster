@@ -7,6 +7,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbEndpoint;
@@ -14,6 +16,9 @@ import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.libusbAndroidTest.databinding.ActivityMainBinding;
@@ -31,9 +36,14 @@ public class MainActivity extends AppCompatActivity {
     private UsbManager usbManager;
 
     private TextView tv;
+    private EditText volInput;
+
+    private CheckBox autoApply;
+
+    private int deviceDescriptor = -1;
 
     private static String deviceName;
-    private static final String TAG = "libusbAndroidTest" ;
+    private static final String TAG = "USB DAC Volume Adjustment" ;
     private static final String ACTION_USB_PERMISSION =
             "com.android.example.USB_PERMISSION";
 
@@ -67,9 +77,17 @@ public class MainActivity extends AppCompatActivity {
         int fileDescriptor = connection.getFileDescriptor();
 
         deviceName = initializeNativeDevice(fileDescriptor);
+        deviceDescriptor = fileDescriptor;
+
+        if(autoApply.isChecked()){
+            setDeviceVolume(fileDescriptor);
+        }
+
 
         // Example of a call to a native method
         tv.setText(deviceName);
+        tv.setBackgroundColor(Color.TRANSPARENT);
+
     }
 
     protected void checkUsbDevices()
@@ -95,6 +113,12 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         tv = binding.sampleText;
+        volInput = binding.volume;
+        autoApply = binding.autoApply;
+
+        SharedPreferences settings = getApplicationContext().getSharedPreferences("myPrefs", 0);
+        volInput.setText(settings.getString("volume", "0000"));
+        autoApply.setChecked(settings.getBoolean("autoApply", false));
 
         // Initialize UsbManager
         usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
@@ -106,9 +130,62 @@ public class MainActivity extends AppCompatActivity {
         checkUsbDevices();
     }
 
+    public void applyButtonPressed(View view){
+        String volume = volInput.getText().toString();
+
+        if(deviceDescriptor < 0){
+            tv.setBackgroundColor(Color.RED);
+            return;
+        }
+
+        try {
+            setDeviceVolume(deviceDescriptor);
+            volInput.setBackgroundColor(Color.TRANSPARENT);
+        } catch (IllegalArgumentException e){
+            volInput.setText("");
+            volInput.setBackgroundColor(Color.RED);
+            return;
+        }
+
+        SharedPreferences settings = getApplicationContext().getSharedPreferences("myPrefs", 0);
+        if(!settings.getString("volume", "").equals(volume)) {
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString("volume", volume);
+            editor.apply();
+        }
+    }
+    public void checkboxPressed(View view){
+        SharedPreferences settings = getApplicationContext().getSharedPreferences("myPrefs", 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("autoApply", autoApply.isChecked());
+        editor.apply();
+    }
+
+
+    public static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                    + Character.digit(s.charAt(i+1), 16));
+        }
+        return data;
+    }
+
     /**
      * A native method that is implemented by the 'lib' native library,
      * which is packaged with this application.
      */
     public native String initializeNativeDevice(int fileDescriptor);
+    public native void setDeviceVolume(int fileDescriptor, byte[] volume);
+
+    public void setDeviceVolume(int fileDescriptor){
+        String volume = volInput.getText().toString();
+
+        if(!volume.matches("[0-9A-Fa-f]{4}")){
+            throw new IllegalArgumentException();
+        }
+
+        setDeviceVolume(fileDescriptor, hexStringToByteArray(volume));
+    }
 }

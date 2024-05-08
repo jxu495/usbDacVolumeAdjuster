@@ -6,7 +6,7 @@ android {
     compileSdk 30
 
     defaultConfig {
-        applicationId "com.example.libusbAndroidTest"
+        applicationId 'com.example.libusbAndroidTest'
         minSdk 28
         targetSdk 30
         versionCode 1
@@ -39,6 +39,7 @@ android {
     buildFeatures {
         viewBinding true
     }
+    namespace 'com.example.libusbAndroidTest'
 }
 
 dependencies {
