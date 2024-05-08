@@ -1,61 +1,28 @@
-# libusbAndroidTest
- Example of an Android app for testing libusb with Java and C++.
- 
-# Why
-Support for libusb in non rooted Android devices is still not properly solved [ref](https://github.com/libusb/libusb/pull/874), this repository tries combines the code from various repositories (references below) to generate an Android app to connect to usb devices combining Java and Native c++ code.
+# usbDacVolumeAndroid
 
-Compared to [my other repository wiht only native Android code](https://github.com/ibaiGorordo/libusbNativeAndroidTest) that used a version of libusb that is still not final, this repository uses the official libusb library version.
+Simple application to set the USB DAC volume on UNROOTED Android Devices
+
+# Why
+The vast majority of high end android smartphones sold today do not contain a 3.5mm headphone jack. To remedy this, most people will use a USB-C to 3.5mm DAC. However, there are certian DACs (namely the Apple USB- C DAC) that do not default to their highest output setting. On most platforms (Windows, Linux, macOS, iOS), this isn't an issue because they either force the highest DAC volume and adjust their own mixer volume, or they control the DAC volume explicitly. Android does neither, so as a result, some DACs are quieter than they possibly can be.
 
 # Usage
-The modified libusb library is added as a submodule, so you will have to load the submodule either by clonning with the recursive flag or:
+Launch the application, and connect your DAC. 
+You should recieve a prompt asking to give USB Permission to the application. Press OK.
+![image](https://github.com/guyman624/usbDacVolumeAndroid/assets/82007920/48d92739-bc2a-406b-853c-a14bf6f1228a)
 
-```
-git clone https://github.com/ibaiGorordo/libusbAndroidTest.git
-cd libusbAndroidTest
-git submodule update --init
-```
+Once you have accepted, you should see this:
+![image](https://github.com/guyman624/usbDacVolumeAndroid/assets/82007920/565c040a-b112-43c2-bfd9-eef9f068121c)
 
-# Output
-The name of the connected device will appear on the screem. Extra information of the device is displayed in the logcat, you can check it by filtering for text contanining the **LOG_TAG** string (defined in libusb_utils.h and set to *libusbNativeAndroidTest* by default).
+- The top text input is the HEXADECIMAL value to send to the dongle. Leave this as 0000 for 100% volume.
 
-### Example
-```
-I/libusbAndroidTest:
-Dev (bus 1, device 2): 03E7 - 2485 speed: 480M
-      Manufacturer:              Movidius Ltd.
-      Product:                   Movidius MyriadX
-      Serial Number:             03e72485
-      Configuration:
-        wTotalLength:            32
-        bNumInterfaces:          1
-        bConfigurationValue:     1
-        iConfiguration:          0
-        bmAttributes:            80h
-        MaxPower:                250
-        Interface:
-          bInterfaceNumber:      0
-          bAlternateSetting:     0
-          bNumEndpoints:         2
-          bInterfaceClass:       255
-          bInterfaceSubClass:    17
-          bInterfaceProtocol:    255
-          iInterface:            0
-          Endpoint:
-            bEndpointAddress:    81h
-            bmAttributes:        02h
-            wMaxPacketSize:      512
-            bInterval:           0
-            bRefresh:            0
-            bSynchAddress:       0
-          Endpoint:
-            bEndpointAddress:    01h
-            bmAttributes:        02h
-            wMaxPacketSize:      512
-            bInterval:           0
-            bRefresh:            0
-            bSynchAddress:       0
-```
+- Auto Apply on Start means that the new value will be sent to the dongle immidiately upon detection.
 
-# References:
-- Pull request to understand how to use libusb in Android with Java and C++ native code: https://github.com/libusb/libusb/pull/830
-- Repository where the libusb_utils.h functions were taken from: https://github.com/Peter-St/libusb
+- Apply will set the volume on the device.
+
+- The bottom is the name of the detected USB Device.
+
+You will temporarily lose sound during the setting of volume, however you should be able to restart playback after it has beens set. Please be aware that this setting is only saved until you unplug the headphones.
+
+
+# Special thanks to:
+[ibaiGorordo](https://github.com/ibaiGorordo/libusbAndroidTest) for most of the code :>
