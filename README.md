@@ -2,16 +2,19 @@
 
 Simple application to set the USB DAC volume on UNROOTED Android Devices
 
+[DOWNLOAD](https://github.com/guyman624/usbDacVolumeAndroid/releases/download/release-1.0/app-debug.apk)
+
 # Why
 The vast majority of high end android smartphones sold today do not contain a 3.5mm headphone jack. To remedy this, most people will use a USB-C to 3.5mm DAC. However, there are certian DACs (namely the Apple USB- C DAC) that do not default to their highest output setting. On most platforms (Windows, Linux, macOS, iOS), this isn't an issue because they either force the highest DAC volume and adjust their own mixer volume, or they control the DAC volume explicitly. Android does neither, so as a result, some DACs are quieter than they possibly can be.
 
 # Usage
 Launch the application, and connect your DAC. 
 You should recieve a prompt asking to give USB Permission to the application. Press OK.
-![image](https://github.com/guyman624/usbDacVolumeAndroid/assets/82007920/48d92739-bc2a-406b-853c-a14bf6f1228a)
+<img src="https://github.com/guyman624/usbDacVolumeAndroid/assets/82007920/48d92739-bc2a-406b-853c-a14bf6f1228a" width="512">
 
-Once you have accepted, you should see this:
-![image](https://github.com/guyman624/usbDacVolumeAndroid/assets/82007920/565c040a-b112-43c2-bfd9-eef9f068121c)
+Once you have accepted, you should see this:<br>
+<img src="https://github.com/guyman624/usbDacVolumeAndroid/assets/82007920/b9e5bdfe-7f91-4eb1-b846-b6d6fb4a7216" width="512">
+
 
 - The top text input is the HEXADECIMAL value to send to the dongle. Leave this as 0000 for 100% volume.
 
