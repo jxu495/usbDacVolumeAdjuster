@@ -11,6 +11,7 @@ The vast majority of high end android smartphones sold today do not contain a 3.
  - OnePlus 12R/Android 14 (Working)
  - OnePlus 7T/Android10/12 (Working)
  - Pixel 3/Android 11 (Working)
+ - Galaxy A34/Android 14 (Working)
  - Huawei P20/Android 10 (NOT WORKING... Unknown reason...)
  - Maybe more? Let me know.
 
