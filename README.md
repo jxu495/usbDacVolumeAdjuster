@@ -14,13 +14,6 @@ The vast majority of high end android smartphones sold today do not contain a 3.
  - Maybe more? Let me know.
 
 # Usage
-Launch the application, and connect your DAC. 
-You should recieve a prompt asking to give USB Permission to the application. Press OK.
-<img src="https://github.com/guyman624/usbDacVolumeAndroid/assets/82007920/48d92739-bc2a-406b-853c-a14bf6f1228a" width="512">
-
-Once you have accepted, you should see this:<br>
-<img src="https://github.com/guyman624/usbDacVolumeAndroid/assets/82007920/b9e5bdfe-7f91-4eb1-b846-b6d6fb4a7216" width="512">
-
 
 - The top text input is the HEXADECIMAL value to send to the dongle. Leave this as 0000 for 100% volume.
 
